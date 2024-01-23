@@ -2,7 +2,10 @@ import { useState } from "react";
 export default function SelectLesson(){
     const [startYear, setStartYear] = useState(-3000);
     const [endYear, setEndYear] = useState(2023);
-
+    const [selectedYears, setSelectedYears] = useState([]);
+    const [selectedNumbers, setSelectedNumbers] = useState([]);
+    const totalSelectedYears = selectedYears.reduce((sum, year) => sum + year, 0);
+    const totalSelectedNumbers = selectedNumbers.reduce((sum, number) => sum + number, 0);
     const handleStartYearChange = (event) => {
         const newStartYear = parseInt(event.target.value, 10);
         setStartYear(newStartYear);
@@ -33,8 +36,25 @@ export default function SelectLesson(){
 
   const handleTileClick = (rowIndex, colIndex) => {
     setGrid((prevGrid) => {
-      const updatedGrid = [...prevGrid];
-      updatedGrid[rowIndex][colIndex].selected = true // Toggle selected state
+      const updatedGrid = prevGrid.map((row, i) =>
+        row.map((tile, j) => ({
+          ...tile,
+          selected: i === rowIndex && j === colIndex ? !tile.selected : tile.selected,
+        }))
+      );
+  
+      // Update selected years and numbers based on tile selection
+      const selectedYear = startYear + rowIndex;
+      const selectedNumber = rowIndex * numCols + colIndex + 1;
+  
+      if (updatedGrid[rowIndex][colIndex].selected) {
+        setSelectedYears((prevSelectedYears) => [...prevSelectedYears, selectedYear]);
+        setSelectedNumbers((prevSelectedNumbers) => [...prevSelectedNumbers, selectedNumber]);
+      } else {
+        setSelectedYears((prevSelectedYears) => prevSelectedYears.filter((year) => year !== selectedYear));
+        setSelectedNumbers((prevSelectedNumbers) => prevSelectedNumbers.filter((number) => number !== selectedNumber));
+      }
+  
       return updatedGrid;
     });
   };
@@ -93,12 +113,19 @@ export default function SelectLesson(){
         )}
       </div>
     </div>
-
-            <button   className="register-button"><a href= "\LearnMode" className="link-primary">Learn Mode</a></button>
-            <button   className="register-button"><a href= "\TestMode" className="link-primary">Test Mode</a></button>
-            <button   className="register-button"><a href= "\ScoreBoard" className="link-primary">go to scoreboard</a></button>
-
+            <div>
+              <p>
+                Chosen years were: {selectedYears.length > 0 ? `${startYear} until ${endYear}` : 'None'}
+              </p>
+              <p>
+                Chosen numbers were: {selectedNumbers.length > 0 ? selectedNumbers.join(', ') : 'None'}
+              </p>
+          </div>
+          <button   className="register-button"><a href= "\LearnMode" className="link-primary">Learn Mode</a></button>
+          <button   className="register-button"><a href= "\TestMode" className="link-primary">Test Mode</a></button>
+          <button   className="register-button"><a href= "\ScoreBoard" className="link-primary">go to scoreboard</a></button>
         </div>
+
         
 
 
