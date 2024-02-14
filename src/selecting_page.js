@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import axios from 'axios';
+
 export default function SelectLesson(){
     const [startYear, setStartYear] = useState(-3000);
     const [endYear, setEndYear] = useState(2023);
@@ -20,6 +22,25 @@ export default function SelectLesson(){
           setEndYear(newEndYear);
         }
       };
+      const [data, setData] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
+
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await axios.get('http://127.0.0.1:5000/api/all_countries');
+            setData(response.data);
+          } catch (error) {
+            setError(error);
+
+          } finally {
+            setLoading(false);
+          }
+        };
+    
+        fetchData();
+      }, []);
 
     const numRows = 20;
     const numCols = 20;
