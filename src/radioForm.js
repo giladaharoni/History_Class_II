@@ -1,7 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { api_path } from './constant';
 
-const RadioForm = ({ questionsAndAnswers, submitClicked }) => {
+const RadioForm = ({submitClicked }) => {
   const [helpIndex, setHelpIndex] = useState(null);
+  let user_id = localStorage.getItem('user_id')
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(api_path + '/api/test');
+        const rows = [];
+        for (let index = 0; index < response.data.length; index += 8) {
+          rows.push(response.data.slice(index, index + 8));
+        }
+      } catch (error) {
+      } finally {
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div>

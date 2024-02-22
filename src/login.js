@@ -1,6 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
+import {api_path} from './constant.js'
 
 export default function Login() {
     let navigate = useNavigate();
@@ -10,28 +12,26 @@ export default function Login() {
         var password = document.getElementById("password").value;
         var nickname = document.getElementById("nickname").value;
         var usernum = -1;
+        axios.get(api_path+"/api/login/"+nickname+"/"+password)
+        .then(response => {
+            if (response.status === 200) {
+                var id = response.data;
+                localStorage.setItem('user_id', id);
+                navigate('/SelectLesson');
+            } else {
+                throw new Error("Wrong password");
+            }
+        })
+        .catch(error => {
+            if (error.status=400) {
+                alert(error.response.data['message'])
+            } else {
+                alert("Error occurred: " + error.message);
 
-        // axios.post('https://localhost:7125/api/User?username='+nickname+'&password='+password)
-        // .then(response => {
-        //     if (response.data != null) {
-        //         localStorage.setItem('jwtToken', response.data);
-        //         navigate('/Talk')
-        //         setToken(0);
-        //         //this.setState({ redirect: true });
-        //     } else {
-        //         alert("incorect nickname or password");
-        //         return;
-
-        //     }
-        // })
-
-
+            }
+            // Handle the error here
             
-
-        
-        if (token ==-1) {
-            
-        } 
+        });
         
 
         

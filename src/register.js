@@ -1,5 +1,7 @@
 import React from 'react'
 import { Navigate, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { api_path } from './constant';
 // import axios from 'axios';
 
 
@@ -57,31 +59,26 @@ function Register() {
         var password = document.getElementById("password").value;
         var nickname = document.getElementById("nickname").value;
         var passwordValidation = document.getElementById("validation").value;
-        var image = document.getElementById("image").value;
-        // axios.post('https://localhost:7125/register?username='+email+'&nickname='+nickname+'&password='+password)
-        // .then(response => {
-        //     if (response.data != null) {
-        //         localStorage.setItem('jwtToken', response.data);
-        //         navigate('/talk')
-        //         //this.setState({ redirect: true });
-        //     } else {
-        //         alert("incorect nickname or password");
-        //         return;
-
-        //     }
-        // })
-        var user = {
-            email: email,
-            password: password,
-            image: image,
-            nickname: nickname
-        };
-        if (!isOk(user, passwordValidation)) {
-            return;
+        if (password != passwordValidation) {
+            alert("passsword validation failed")
+            return
         }
-        //fetch new contact
-        
-        //navigate('/');
+        let json = {email: email, nickname: nickname, password: password}
+        axios.post(api_path+"/api/register",json)
+        .then(response => {
+            if (response.status === 200) {
+                var id = response.data['user_id'];
+                localStorage.setItem('user_id', id);
+                navigate('/SelectLesson');
+            } else {
+                throw new Error("Wrong password");
+            }
+        })
+        .catch(error => {
+            // Handle the error here
+            alert("Error occurred: " + error.response.data['message']);
+        });
+
         return;
     };
 
@@ -115,8 +112,6 @@ function Register() {
                     <input type="Name" className="form-control" id="nickname"></input>
                 </div>
                 <div className="mb-3">
-                    <label  className="form-label">Add image</label>
-                    <input type="file" accept="image/*" id="image"></input>
                     <div className="col">
                         <button type="submit" id="register" className="btn btn-primary mb-3" onClick={RegisterUser}>Register</button>
                     </div>
