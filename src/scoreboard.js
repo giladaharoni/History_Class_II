@@ -1,37 +1,45 @@
+import { api_path } from "./constant";
+import axios from "axios";
+import { useEffect, useState } from "react";
 export default function ScoreBoard(){
+    const [records, setRecords] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(api_path + '/api/scoreboard');
+            console.log(response)
+            setRecords(response.data.board)
+
+          } catch (error) {
+          } finally {
+          }
+        };
+    
+        fetchData();
+      }, []);
     return(
         <div>score page
-        <table class="table">
+        <table className="table">
             <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Score</th>
-                <th scope="col">lesson</th>
-                <th scope="col">time</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
+                {records.map((record,index) => (
+                    <tr>
+                <th scope="row">{index+1}</th>
+                <td>{record[0]}</td>
+                <td>{parseFloat(record[1])}</td>
+                {console.log(record[1])}
+
 
             </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td >Larry the Bird</td>
-                <td >Larry the Bird</td>
-                <td>@twitter</td>
-            </tr>
+
+                ))}
+            
             </tbody>
         </table> 
         

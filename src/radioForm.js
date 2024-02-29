@@ -1,57 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { api_path } from './constant';
+import React, { useState } from 'react';
 
-const RadioForm = ({submitClicked }) => {
-  const [helpIndex, setHelpIndex] = useState(null);
-  let user_id = localStorage.getItem('user_id')
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(api_path + '/api/test');
-        const rows = [];
-        for (let index = 0; index < response.data.length; index += 8) {
-          rows.push(response.data.slice(index, index + 8));
-        }
-      } catch (error) {
-      } finally {
+const RadioForm = ({ questionsAndAnswers, submitClicked, setscore }) => {
+  const [selectedAnswers, setSelectedAnswers] = useState(Array(questionsAndAnswers.length).fill(null));
+
+  const handleAnswerSelection = (index, selectedOption) => {
+    const updatedSelectedAnswers = [...selectedAnswers];
+    updatedSelectedAnswers[index] = selectedOption;
+    setSelectedAnswers(updatedSelectedAnswers);
+    calculateScore();
+  };
+
+  const calculateScore = () => {
+    let grade = 0
+    questionsAndAnswers.forEach((qa, index) => {
+      if (selectedAnswers[index] === qa.right_answer[0]) {
+        grade++;
       }
-    };
-
-    fetchData();
-  }, []);
+    });
+    setscore((grade/questionsAndAnswers.length)*100)
+  };
 
   return (
     <div>
       {questionsAndAnswers.map((qa, index) => (
-        <div key={index}>
-          <p>
+        <div key={index} className='p-2 border'>
+          <p className='fw-bold'>
             {qa.question}
             <button
               type="button"
               className="btn btn-warning"
-              onClick={() => setHelpIndex(index)}
+              onClick={() => alert(qa.right_answer[0])}
             >
               Help
             </button>
           </p>
-          {qa.answers.map((answer) => (
-            <div className="form-check" key={answer.id}>
+          {qa.options.map((answer) => (
+            <div className="form-check" key={answer}>
               <input
                 className="form-check-input"
                 type="radio"
                 name={`flexRadioDefault${index}`}
-                id={answer.id}
+                id={answer}
+                onChange={() => handleAnswerSelection(index, answer)}
               />
               <label
                 className={`form-check-label ${
-                  helpIndex === index && answer.id === qa.correctAnswerId ? 'text-danger' : '',
-                  submitClicked && answer.id === qa.correctAnswerId ? 'text-success' : ''
+                  submitClicked && answer === qa.right_answer[0] ? 'text-success' : ''
                 }`}
-
-                htmlFor={answer.id}
+                htmlFor={answer}
               >
-                {answer.label}
+                {answer}
               </label>
             </div>
           ))}

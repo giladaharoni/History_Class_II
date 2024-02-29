@@ -4,6 +4,7 @@ export default function LearnMode() {
     let location = useLocation();
     const jsonData = location.state;
     console.log(jsonData)
+    localStorage.setItem('lesson_id', jsonData['lesson']);
     const figure = (figure) => (
         <div class="card" style={{width: '18rem'}}>
             <img src={figure['description']} class="card-img-top" alt="..."/>
