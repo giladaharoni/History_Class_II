@@ -1,24 +1,63 @@
 import { api_path } from "./constant";
 import axios from "axios";
 import { useEffect, useState } from "react";
-export default function ScoreBoard(){
+export default function ScoreBoard() {
     const [records, setRecords] = useState([]);
+    const [recomended_countries, setRecomended] = useState([]);
+    const [loading, setLoading] = useState(true);
+  
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await axios.get(api_path + '/api/scoreboard');
-            console.log(response)
-            setRecords(response.data.board)
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(api_path + '/api/scoreboard');
+          console.log(response);
+          setRecords(response.data.board);
+        } catch (error) {
+          console.error('Error fetching scoreboard:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      const fetchRecomended = async () => {
+        try {
+          let user = localStorage.getItem('user_id');
+          const response = await axios.get(api_path + '/api/recomended_countries?user_id=' + user);
+          console.log(response);
+          setRecomended(response.data);
+        } catch (error) {
+          console.error('Error fetching recommended countries:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      const fetchDataAndRecomended = async () => {
+        setLoading(true);
+        await fetchData();
+        await fetchRecomended();
+      };
+  
+      fetchDataAndRecomended();
+    }, []);
+    //   useEffect(() => {
+    //     const fetchData = async () => {
+    //       try {
+    //         let user = localStorage.getItem('user_id')
+    //         const response = await axios.get(api_path + '/api/recomended_countries?user_id='+user);
+    //         console.log(response)
+    //         setRecomended(response.data)
 
-          } catch (error) {
-          } finally {
-          }
-        };
+    //       } catch (error) {
+    //       } finally {
+    //       }
+    //     };
     
-        fetchData();
-      }, []);
+    //     fetchData();
+    //   }, []);
     return(
-        <div>score page
+        <div>
+        <h1>score page</h1>
         <table className="table">
             <thead>
             <tr>
@@ -47,7 +86,7 @@ export default function ScoreBoard(){
         
         
         
-        
+            <div>recomended countries to learn about according to your previous lessons are: {recomended_countries.join(', ')}</div>
             <button   className="register-button"><a href= "\SelectLesson" className="link-primary">select another lesson</a></button>
         </div>
 

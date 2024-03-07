@@ -5,37 +5,6 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { api_path } from './constant';
 import { useNavigate } from 'react-router-dom';
-// const questionsAndAnswers = [
-//   {
-//     question: "What is your favorite color?",
-//     answers: [
-//       { id: "color1", label: "Blue" },
-//       { id: "color2", label: "Red" },
-//       { id: "color3", label: "Green" },
-//     ],
-//     correctAnswerId: "color1"
-//   },
-//   {
-//     question: "What is your favorite animal?",
-//     answers: [
-//       { id: "animal1", label: "Dog" },
-//       { id: "animal2", label: "Cat" },
-//       { id: "animal3", label: "Bird" },
-//     ],
-//     correctAnswerId: "animal2"
-
-//   },
-//   {
-//     question: "What is your favorite animal?",
-//     answers: [
-//       { id: "animal1", label: "Dog" },
-//       { id: "animal2", label: "Cat" },
-//       { id: "animal3", label: "Bird" },
-//     ],
-//     correctAnswerId: "animal1"
-
-//   },
-// ];
 
 export default function TestMode() {
   let navigate = useNavigate();
@@ -96,6 +65,7 @@ export default function TestMode() {
     console.log(questionsAndAnswers)
     return (
       <div>
+      <h1>test</h1>
         <div className="container text-center">
           <div className="row">
             <div className="col">

@@ -44,7 +44,8 @@ export default function LearnMode() {
         </div>
     )
     return (
-        <div>learning mode page
+        <div>
+            <h1>learning mode page</h1>
             <button className="register-button"><a href="\SelectLesson" className="link-primary">select another lesson</a></button>
             <div class="container text-center">
                 <div class="row align-items-start">

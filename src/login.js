@@ -45,7 +45,6 @@ export default function Login() {
     return (
         
         <div className='login-class'>
-        <img className="logo" alt="image"/>
             <nav className="navbar navbar-light bg-light">
                 <div className="container-fluid">
                     <div className="navbar-brand" href="#"  style={{ color: "white" }} >

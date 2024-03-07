@@ -31,6 +31,7 @@ export default function SelectLesson() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [leanred_countries, setLearned_countries] = useState([])
+  const [countries_names, setLearned_countries_name] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,16 +93,25 @@ export default function SelectLesson() {
     
     
   )
-
-  const onClickCountry = (id) => {
+  const onClickCountry = (id, name) => {
     let check = leanred_countries.indexOf(id)
-  
+    let check_name = countries_names.indexOf(name)
     
     if (check!=-1) {
-      leanred_countries.splice(check)
+      setLearned_countries(leanred_countries.toSpliced(check))
+
 
     } else {
-      leanred_countries.push(id)
+      setLearned_countries([...leanred_countries,id])
+
+    }
+    if (check_name!=-1) {
+      setLearned_countries_name(countries_names.toSpliced(check_name))
+
+
+    } else {
+      setLearned_countries_name([...countries_names,name])
+
     }
   };
 
@@ -138,7 +148,7 @@ export default function SelectLesson() {
               <img src={country[2]} className="card-img-top" alt="..."/>
               <div className="card-body">
                 <h5 className="card-title">{country[1]}</h5>
-                <button className="btn btn-primary" onClick={()=>{onClickCountry(country[0])}}>add to lesson</button>
+                <button className="btn btn-primary" onClick={()=>{onClickCountry(country[0],country[1])}}>add to lesson</button>
               </div>
             </div>
             
@@ -151,7 +161,7 @@ export default function SelectLesson() {
   })
   return (
     <div>
-      <div>select lesson page</div>
+      <h1>select lesson page</h1>
 
       <div>Please select year range:</div>
       <div>
@@ -183,17 +193,17 @@ export default function SelectLesson() {
       </div>
       <div>
         <p>
-          Chosen years were: {selectedYears.length > 0 ? `${startYear} until ${endYear}` : 'None'}
+          Chosen years were: { startYear + ' until ' + endYear}
         </p>
         <p>
-          Chosen numbers were: {selectedNumbers.length > 0 ? selectedNumbers.join(', ') : 'None'}
+          Chosen numbers were: { countries_names.join(', ') }
         </p>
       </div>
       <button className="register-button"><a onClick={()=>(toLearnMode())} className="link-primary">Learn Mode</a></button>
       <button className="register-button"><a href="\TestMode" className="link-primary">Test Mode</a></button>
       <button className="register-button"><a href="\ScoreBoard" className="link-primary">go to scoreboard</a></button>
       <div>
-        <div>Selectable Tiles Grid:</div>
+        <div>Select countries:</div>
         <div>
           {grid_render()}
         </div>
