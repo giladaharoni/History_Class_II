@@ -10,7 +10,6 @@ export default function ScoreBoard() {
       const fetchData = async () => {
         try {
           const response = await axios.get(api_path + '/api/scoreboard');
-          console.log(response);
           setRecords(response.data.board);
         } catch (error) {
           console.error('Error fetching scoreboard:', error);
@@ -23,7 +22,6 @@ export default function ScoreBoard() {
         try {
           let user = localStorage.getItem('user_id');
           const response = await axios.get(api_path + '/api/recomended_countries?user_id=' + user);
-          console.log(response);
           setRecomended(response.data);
         } catch (error) {
           console.error('Error fetching recommended countries:', error);
@@ -72,7 +70,7 @@ export default function ScoreBoard() {
                 <th scope="row">{index+1}</th>
                 <td>{record[0]}</td>
                 <td>{parseFloat(record[1])}</td>
-                {console.log(record[1])}
+
 
 
             </tr>
