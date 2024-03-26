@@ -62,7 +62,6 @@ export default function TestMode() {
     return <div>loading</div>
     
   } else {
-    console.log(questionsAndAnswers)
     return (
       <div>
       <h1>test</h1>
