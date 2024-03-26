@@ -3,21 +3,25 @@ import React, { useState } from 'react';
 const RadioForm = ({ questionsAndAnswers, submitClicked, setscore }) => {
   const [selectedAnswers, setSelectedAnswers] = useState(Array(questionsAndAnswers.length).fill(null));
 
-  const handleAnswerSelection = (index, selectedOption) => {
-    const updatedSelectedAnswers = [...selectedAnswers];
-    updatedSelectedAnswers[index] = selectedOption;
-    setSelectedAnswers(updatedSelectedAnswers);
-    calculateScore();
-  };
+	const handleAnswerSelection = (index, selectedOption) => {
+	  setSelectedAnswers(prevSelectedAnswers => {
+		const updatedSelectedAnswers = [...prevSelectedAnswers];
+		updatedSelectedAnswers[index] = selectedOption;
+		calculateScore(updatedSelectedAnswers); // Pass the updated answers to calculateScore
+		return updatedSelectedAnswers;
+	  });
+	};
 
-  const calculateScore = () => {
+
+  const calculateScore = (updatedSelectedAnswers) => {
     let grade = 0
     questionsAndAnswers.forEach((qa, index) => {
-      if (selectedAnswers[index] === qa.right_answer[0]) {
+	
+      if (updatedSelectedAnswers[index] === qa.right_answer) {
         grade++;
       }
     });
-    setscore((grade/questionsAndAnswers.length)*100)
+    setscore((grade/8)*100)
   };
 
   return (
@@ -29,7 +33,7 @@ const RadioForm = ({ questionsAndAnswers, submitClicked, setscore }) => {
             <button
               type="button"
               className="btn btn-warning"
-              onClick={() => alert(qa.right_answer[0])}
+              onClick={() => alert(qa.right_answer)}
             >
               Help
             </button>
@@ -41,7 +45,7 @@ const RadioForm = ({ questionsAndAnswers, submitClicked, setscore }) => {
                 type="radio"
                 name={`flexRadioDefault${index}`}
                 id={answer}
-                onChange={() => handleAnswerSelection(index, answer)}
+                onClick={() => handleAnswerSelection(index, answer)}
               />
               <label
                 className={`form-check-label ${
